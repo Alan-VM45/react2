@@ -2,7 +2,7 @@
 interface ProductItemProps {
     name: string;
     id: string | number;
-  imageUrl?: string; // Opcional, por si el producto no tiene imagen todavía
+    imageUrl?: string; // Opcional, por si el producto no tiene imagen todavía
 }
 
 const ProductItem = ({ name, id, imageUrl }: ProductItemProps) => {

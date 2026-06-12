@@ -11,10 +11,10 @@ const menuItems = [
 ];
 
 return (
-    <aside className="w-64 min-h-screen bg-gray-900 border-r border-gray-800 p-6 flex flex-col">
+    <aside className="w-64 min-h-screen bg-gray-000 border-r border-gray-600 p-6 flex flex-col">
     {/* Logo */}
-    <div className="text-red-600 font-bold text-2xl mb-10">
-        Santander
+    <div className="text-green-700 font-bold text-2xl mb-10">
+        Ecommerce
     </div>
 
     {/* Navegación */}

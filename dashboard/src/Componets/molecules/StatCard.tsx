@@ -15,7 +15,7 @@ const StatCard = ({ title, count, onView, onAdd }: StatCardProps) => {
             <button onClick={onView} className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition">
             Ver Listado
             </button>
-            <button onClick={onAdd} className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
+            <button onClick={onAdd} className="px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800 transition">
             Agregar {title.slice(0, -1)}
             </button>
         </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Layout from '../../../Componets/organisms/Layaout';
 import ProductItem from '../../../Componets/molecules/ProductItem';
+import Button from '../../../Componets/atoms/Button';
 import SearchBar from '../../../Componets/molecules/SearchBar';
 
 const ProductsList = () => {
@@ -11,12 +11,15 @@ const [products] = useState([
 ]);
 
 return (
-    <Layout pageTitle="Productos">
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 px-4 py2" >
         {/* Buscador */}
         <SearchBar 
             placeholder="Buscar producto..." 
             onSearch={(val) => console.log('Buscando:', val)} 
+        />
+        <Button
+            label="Agregar Productos" 
+            variant="secondary" 
         />
 
         {/* Lista de productos */}
@@ -31,7 +34,6 @@ return (
             ))}
         </div>
     </div>
-    </Layout>
 );
 };
 

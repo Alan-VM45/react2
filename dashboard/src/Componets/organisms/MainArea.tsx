@@ -10,7 +10,6 @@ return (
     <header className="mb-8">
         <h1 className="text-3xl font-bold text-white">{title}</h1>
     </header>
-
       {/* Contenido dinámico (la página en sí) */}
     <main>
         {children}

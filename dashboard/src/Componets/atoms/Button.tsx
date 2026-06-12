@@ -9,9 +9,9 @@ const Button = ({ label, onClick, variant = 'primary', type = 'button' }: Button
 // Mapeo de estilos para cada variante
     const baseStyle = "px-4 py-2 rounded transition font-medium";
     const variants = {
-        primary: "bg-red-600 text-white hover:bg-red-700",
-        secondary: "bg-gray-700 text-white hover:bg-gray-600",
-        danger: "bg-red-900 text-red-200 hover:bg-red-800"
+        primary: "bg-green-700 text-white hover:bg-green-700",
+        secondary: "bg-green-700 text-white hover:bg-gray-600",
+        danger: "bg-green-700 text-red-200 hover:bg-green-600"
     };
 
     return (
