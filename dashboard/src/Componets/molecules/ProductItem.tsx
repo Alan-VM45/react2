@@ -7,7 +7,7 @@ interface ProductItemProps {
 
 const ProductItem = ({ name, id, imageUrl }: ProductItemProps) => {
 return (
-    <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg border border-gray-700 hover:border-red-500 transition-all cursor-pointer">
+    <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg border border-gray-700 hover:border-green-500 transition-all cursor-pointer">
         <div className="flex items-center gap-4">
             {/* Contenedor de la imagen */}
         <div className="w-12 h-12 rounded overflow-hidden bg-gray-700">

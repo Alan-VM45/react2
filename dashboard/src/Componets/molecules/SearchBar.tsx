@@ -10,7 +10,7 @@ const SearchBar = ({ placeholder = "Buscar...", onSearch }: SearchBarProps) => {
             type="text"
             placeholder={placeholder}
             onChange={(e) => onSearch(e.target.value)}
-            className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-700 focus:outline-none focus:border-red-500"
+            className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-700 focus:outline-none focus:border-green-500"
         />
         </div>
     );
