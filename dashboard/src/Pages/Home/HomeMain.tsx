@@ -1,5 +1,4 @@
 import StatCard from "../../Componets/molecules/StatCard";
-import Button from "../../Componets/atoms/Button";
 import { useNavigate } from 'react-router-dom';
 
 // Ya no necesitas el div con p-8 ni el h1 extra, 
