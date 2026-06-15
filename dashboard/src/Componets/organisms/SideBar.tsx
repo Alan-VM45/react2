@@ -7,7 +7,9 @@ const location = useLocation();
 const menuItems = [
     { name: 'Inicio', path: '/' },
     { name: 'Productos', path: '/products' },
-    { name: 'Tiendas', path: '/stores' },
+    { name: 'Categorias', path: '/categories' },
+    { name: 'Usuarios', path: '/users' }
+
 ];
 
 return (

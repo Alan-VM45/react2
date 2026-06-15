@@ -2,7 +2,7 @@ interface StatCardProps {
     title: string;
     count: number;
     onView: () => void;
-    onAdd: () => void;
+    onAdd?: () => void;
 }
 
 const StatCard = ({ title, count, onView, onAdd }: StatCardProps) => {

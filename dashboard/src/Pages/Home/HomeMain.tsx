@@ -13,20 +13,19 @@ function HomeMain() {
                 onView={() => navigate('/products')} 
                 onAdd={() => console.log('Agregar producto')} 
             />
-            <StatCard
-                title="Tiendas" 
-                count={13} 
-                onView={() => console.log('Ir a lista')} 
-                onAdd={() => console.log('Agregar Tienda')}
-            />
             
-            <div className="mt-4">
-                <Button 
-                    label="Descargar Reporte" 
-                    variant="secondary" 
-                    onClick={() => alert('Descargando...')} 
-                />
-            </div>
+            <StatCard
+                title="Categoias" 
+                count={13} 
+                onView={() => navigate('/categories')} 
+                onAdd={() => console.log('Agregar Categoria')}
+            />
+            <StatCard
+                title="Usuarios" 
+                count={13} 
+                onView={() => navigate('/users')} 
+                onAdd={() => console.log('Agregar Usuarios')}
+            />
         </div>
     );
 }
