@@ -49,9 +49,9 @@ const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
       {/* Perfil abajo */}
       <div className="pt-4 flex-none">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-[#1f1f1f] flex items-center justify-center text-[#e0e0e0]">O</div>
+          <div className="w-10 h-10 rounded-full bg-[#1f1f1f] flex items-center justify-center text-[#e0e0e0]">U</div>
           <div>
-            <div className="text-sm text-[#e0e0e0] font-medium">Olivia</div>
+            <div className="text-sm text-[#e0e0e0] font-medium">Usuario</div>
             <button onClick={() => handleNavigate('/profile')} className="text-xs text-[#a0a0a0] hover:text-[#e0e0e0]">Perfil</button>
           </div>
         </div>
