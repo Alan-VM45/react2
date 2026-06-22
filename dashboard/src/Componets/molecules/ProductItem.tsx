@@ -7,10 +7,10 @@ interface ProductItemProps {
 
 const ProductItem = ({ name, id, imageUrl }: ProductItemProps) => {
 return (
-    <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg border border-gray-700 hover:border-green-500 transition-all cursor-pointer">
+        <div className="flex items-center justify-between p-3 bg-[#242424] rounded-lg border border-[#2a2a2a] hover:border-[#333333] shadow-sm transition-all cursor-pointer">
         <div className="flex items-center gap-4">
             {/* Contenedor de la imagen */}
-        <div className="w-12 h-12 rounded overflow-hidden bg-gray-700">
+        <div className="w-10 h-10 rounded overflow-hidden bg-gray-700 flex items-center justify-center">
             {imageUrl ? (
             <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
             ) : (
@@ -19,14 +19,14 @@ return (
         </div>
         
         {/* Info del producto */}
-        <div className="flex flex-col">
-            <h4 className="text-white font-medium">{name}</h4>
-            <span className="text-gray-400 text-sm">ID: {id}</span>
+                <div className="flex flex-col">
+                    <h4 className="text-[#e0e0e0] font-medium">{name}</h4>
+                    <span className="text-[#a0a0a0] text-sm">ID: {id}</span>
         </div>
     </div>
 
         {/* Indicador visual */}
-        <span className="text-gray-500 text-xl font-bold">›</span>
+            <span className="text-[#a0a0a0] text-lg font-bold">›</span>
     </div>
     );
 };

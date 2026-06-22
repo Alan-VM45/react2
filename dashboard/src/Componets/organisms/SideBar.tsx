@@ -1,40 +1,63 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const Sidebar = () => {
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const menuItems = [
-    { name: 'Inicio', path: '/' },
+    { name: 'Inicio', path: '/home' },
     { name: 'Productos', path: '/products' },
-    { name: 'Categorias', path: '/categories'},
-    { name: 'Perfil', path: '/profile'},
+    { name: 'Categorias', path: '/categories' },
+    { name: 'Tiendas', path: '/stores'},
   ];
 
+  const handleNavigate = (path: string) => {
+    navigate(path);
+    if (onClose) onClose();
+  };
+
   return (
-    <aside className="w-64 min-h-screen bg-black border-r border-gray-600 p-6 flex flex-col">
-      {/* Logo */}
-      <div className="text-green-700 font-bold text-2xl mb-10">
-        Dashboard
-      </div>
+    <>
+    {/* Overlay for mobile when open */}
+    <div className={`${isOpen ? 'fixed inset-0 z-30' : 'hidden'}`} onClick={() => onClose && onClose()} />
+    <aside className={`${isOpen ? 'fixed z-40 left-0 top-0 h-screen flex' : 'hidden md:flex md:fixed md:left-0 md:top-12 md:h-[calc(100vh-3rem)]'} w-56 bg-[#141414] p-6 flex-col h-screen md:h-[calc(100vh-3rem)] justify-between`}> 
 
       {/* Navegación */}
+      <div className="flex-1 overflow-y-auto pb-4">
       <nav className="flex flex-col gap-2">
         {menuItems.map((item) => (
           <button
             key={item.path}
-            onClick={() => navigate(item.path)}
-            className={`px-4 py-3 rounded-lg text-left transition ${
+            onClick={() => handleNavigate(item.path)}
+            className={`px-4 py-2 rounded text-left transition ${
               location.pathname === item.path 
-                ? 'bg-gray-800 text-white font-medium' 
-                : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                ? 'pl-4 border-l-4 border-[#ec0000] text-[#e0e0e0] bg-[#1b1b1b] font-medium' 
+                : 'text-[#a0a0a0] hover:text-[#e0e0e0] hover:bg-[#1b1b1b]'
             }`}
           >
             {item.name}
           </button>
         ))}
       </nav>
+      </div>
+
+      {/* Perfil abajo */}
+      <div className="pt-4 flex-none">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-[#1f1f1f] flex items-center justify-center text-[#e0e0e0]">O</div>
+          <div>
+            <div className="text-sm text-[#e0e0e0] font-medium">Olivia</div>
+            <button onClick={() => handleNavigate('/profile')} className="text-xs text-[#a0a0a0] hover:text-[#e0e0e0]">Perfil</button>
+          </div>
+        </div>
+      </div>
     </aside>
+    </>
   );
 };
 

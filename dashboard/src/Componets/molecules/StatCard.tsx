@@ -7,20 +7,29 @@ interface StatCardProps {
 
 const StatCard = ({ title, count, onView, onAdd }: StatCardProps) => {
     return (
-        <div className="bg-gray-800 p-6 rounded-lg flex items-center justify-between border border-gray-700">
-        <div className="flex items-center gap-4">
-            <span className="text-white font-semibold text-lg">{count} {title}</span>
-        </div>
-        <div className="flex gap-2">
-            <button onClick={onView} className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition">
-            Ver Listado
-            </button>
-            <button onClick={onAdd} className="px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800 transition">
-            Agregar {title.slice(0, -1)}
-            </button>
-        </div>
+        // Reducido p-4 a p-3 para achicar la tarjeta
+        <div className="bg-[#242424] p-3 rounded-lg flex items-center justify-between border border-[#2a2a2a] shadow-sm transition">
+            <div className="flex items-center gap-3">
+                {/* Reducido w-28 h-28 a w-16 h-16 */}
+                <div className=" rounded-full w-16 h-16 flex items-center justify-center flex-shrink-0">
+                    {/* Reducido tamaño de fuente a text-xl */}
+                    <span className="text-xl font-extrabold text-[#e0e0e0]">{count}</span>
+                </div>
+                <div>
+                    <span className="text-[#a0a0a0] text-xs">Total</span>
+                    <p className="text-[#e0e0e0] font-semibold text-base">{title}</p>
+                </div>
+            </div>
+            <div className="flex gap-2">
+                {/* Ajustado padding de botones a px-2 py-1 y texto más pequeño */}
+                <button onClick={onView} className="px-2 py-1 bg-[#1f1f1f] text-[#e0e0e0] rounded hover:bg-[#292929] transition text-xs">
+                    Ver Listado
+                </button>
+                <button onClick={onAdd} className="px-2 py-1 bg-[#ec0000] text-[#e0e0e0] rounded hover:bg-[#c70000] transition text-xs">
+                    Agregar {title.slice(0, -1)}
+                </button>
+            </div>
         </div>
     );
 };
-
 export default StatCard;
