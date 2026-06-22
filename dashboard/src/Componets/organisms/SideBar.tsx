@@ -24,8 +24,8 @@ const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
   return (
     <>
     {/* Overlay for mobile when open */}
-    <div className={`${isOpen ? 'fixed inset-0 z-30' : 'hidden'}`} onClick={() => onClose && onClose()} />
-    <aside className={`${isOpen ? 'fixed z-40 left-0 top-0 h-screen flex' : 'hidden md:flex md:fixed md:left-0 md:top-12 md:h-[calc(100vh-3rem)]'} w-56 bg-[#141414] p-6 flex-col h-screen md:h-[calc(100vh-3rem)] justify-between`}> 
+    <div className={`${isOpen ? 'fixed inset-0 z-30 bg-black/40 md:hidden' : 'hidden'}`} onClick={() => onClose && onClose()} />
+    <aside className={`fixed z-40 left-0 top-0 h-screen w-56 bg-[#141414] p-6 flex-col h-screen md:static md:top-auto md:h-[calc(100vh-3rem)] md:translate-x-0 justify-between transition-transform duration-300 ease-out ${isOpen ? 'translate-x-0 md:translate-x-0' : 'md:translate-x-0 -translate-x-full md:-translate-x-0'} md:flex`}> 
 
       {/* Navegación */}
       <div className="flex-1 overflow-y-auto pb-4">
