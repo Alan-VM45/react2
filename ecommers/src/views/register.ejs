@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registrarse - MiEcommerce</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .error-msg { color: #e74c3c; font-size: 0.8em; margin-top: -10px; margin-bottom: 10px; display: block; }
+    .input-error { border: 1px solid #e74c3c; }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="login-box">
+      <h2>Crear Cuenta</h2>
+      <form action="/register" method="POST">
+        <input type="text" name="username" placeholder="Nombre de usuario" 
+               value="<%= locals.oldData ? oldData.username : '' %>"
+               class="<%= locals.errors && errors.username ? 'input-error' : '' %>">
+        <% if (locals.errors && errors.username) { %>
+          <span class="error-msg"><%= errors.username %></span>
+        <% } %>
+
+        <input type="email" name="email" placeholder="Correo electrónico" 
+               value="<%= locals.oldData ? oldData.email : '' %>"
+               class="<%= locals.errors && errors.email ? 'input-error' : '' %>">
+        <% if (locals.errors && errors.email) { %>
+          <span class="error-msg"><%= errors.email %></span>
+        <% } %>
+
+        <input type="password" name="password" placeholder="Contraseña"
+               class="<%= locals.errors && errors.password ? 'input-error' : '' %>">
+        <% if (locals.errors && errors.password) { %>
+          <span class="error-msg"><%= errors.password %></span>
+        <% } %>
+
+        <button type="submit" class="btn">Registrarse</button>
+      </form>
+      <p>¿Ya tienes cuenta? <a class="algo" href="/">Inicia sesión</a></p>
+    </div>
+  </div>
+
+</body>
+</html>

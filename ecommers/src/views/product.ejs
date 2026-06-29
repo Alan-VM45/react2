@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title><%= product.title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <header class="top-bar">
+  <div class="logo"><a href="/home">MiE<span class="highlight">commerce</span></a></div>
+
+  <div class="search-container">
+  <button class="search-icon" onclick="document.querySelector('.search-bar').classList.toggle('active')">🔍</button>
+  <input type="text" placeholder="Buscar productos..." class="search-bar">
+</div>
+
+  <div class="user-profile">
+    <a href="/profile" class="cart-button">👤 <span class="highlight">Usuario</span></a>
+    <!-- Botón de carrito -->
+    <a href="/cart" class="cart-button">🛒 <span class="highlight">Carrito</span> <span class="cart-count"><%= cartCount %></span></a>
+  </div>
+</header>
+
+  <!-- Contenido principal del producto -->
+  <main class="producto-detalle">
+    <div class="imagen-producto">
+      <img src="<%= product.image || '/images/imagenes/fallback.png' %>" alt="<%= product.title %>">
+    </div>
+    <div class="info-producto">
+      <h1><%= product.title %></h1>
+      <% if (product.stock === 0) { %>
+        <span class="stock-badge out-of-stock detalle">Sin stock</span>
+      <% } %>
+      <p class="category-tag">Categoría: <%= product.category %></p>
+      <p><%= product.description %></p>
+      <p><strong><%= product.price %> puntos</strong></p>
+      <% if (typeof error !== 'undefined' && error) { %>
+        <p class="form-error"><%= error %></p>
+      <% } %>
+      <form action="/cart/add/<%= product.id %>" method="POST">
+        <button type="submit" class="cart-button" <%= product.stock === 0 ? 'disabled' : '' %>>🛒 <span class="highlight">Añadir al Carrito</span></button>
+      </form>
+    </div>
+  </main>
+
+  <!-- Productos relacionados (US #8) -->
+  <section class="sugerencias">
+    <h2>Productos relacionados</h2>
+    <div class="product-grid">
+      <% if (relatedProducts && relatedProducts.length > 0) { %>
+        <% relatedProducts.forEach(related => { %>
+          <div class="product">
+            <a href="/products/<%= related.id %>">
+              <img src="<%= related.image || '/images/imagenes/fallback.png' %>" alt="<%= related.title %>">
+              <div><%= related.title %></div>
+              <span><%= related.price %> puntos</span>
+            </a>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <p class="no-related">No hay productos relacionados disponibles en este momento.</p>
+      <% } %>
+    </div>
+  </section>
+
+</body>
+</html>

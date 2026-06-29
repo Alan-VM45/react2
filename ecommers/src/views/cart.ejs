@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Carrito de Compras</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <a href="/home" class="volver-carrito">⬅ Volver</a>
+
+  <div class="carrito">
+    <h2>Productos en tu Carrito</h2>
+
+    <% if (error) { %>
+      <div class="errors">
+        <p class="error"><%= error %></p>
+      </div>
+    <% } %>
+
+    <% if (!cart || cart.length === 0) { %>
+      <p>Tu carrito está vacío.</p>
+    <% } else { %>
+      <% cart.forEach(item => { %>
+        <div class="item-carrito">
+          <img src="<%= item.product.image %>" alt="<%= item.product.title %>">
+          <div class="info">
+            <p><strong><%= item.product.title %></strong></p>
+            <div class="controles">
+              <form action="/cart/remove/<%= item.id %>" method="POST" style="display:inline-block;">
+                <button type="submit" class="quitar">Quitar</button>
+              </form>
+              <form action="/cart/update/<%= item.id %>" method="POST" class="cantidad">
+                <button type="submit" name="quantity" value="<%= item.quantity - 1 %>">-</button>
+                <span><%= item.quantity %></span>
+                <button type="submit" name="quantity" value="<%= item.quantity + 1 %>">+</button>
+              </form>
+              <span class="precio"><%= item.subtotal.toLocaleString() %></span>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+
+      <div class="total">
+        <span>Total de puntos</span>
+        <strong><%= total.toLocaleString() %></strong>
+      </div>
+
+      <a href="#" class="pagar">Ir a pagar</a>
+    <% } %>
+  </div>
+</body>
+</html>

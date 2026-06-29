@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Búsqueda - MiEcommerce</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Contenido de la tienda -->
+  <div id="main-content">
+
+<!-- Barra superior -->
+<header class="top-bar">
+  <div class="logo"><a href="/home" style="text-decoration: none; color: inherit;">MiE<span class="highlight">commerce</span></a></div>
+
+  <div class="search-container">
+  <form method="GET" action="/search" style="display: flex; width: 100%;">
+    <input type="text" name="query" placeholder="Buscar productos..." class="search-bar" value="<%= query %>" required>
+    <button type="submit" class="search-button" style="padding: 8px 16px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">🔍</button>
+  </form>
+</div>
+
+  <div class="user-profile">
+    <a href="/profile" class="cart-button">👤 <span class="highlight">Usuario</span></a>
+    <!-- Botón de carrito -->
+    <a href="/cart" class="cart-button">🛒 <span class="highlight">Carrito</span> <span class="cart-count"><%= cartCount %></span></a>
+  </div>
+</header>
+
+    <!-- Categorías -->
+    <nav class="categories">
+      <a href="/categories/electronica" class="category">📱<br>Electrónica</a>
+      <a href="/categories/alimentos" class="category">🍔<br>Alimentos</a>
+      <a href="/categories/bebidas" class="category">🥤<br>Bebidas</a>
+      <a href="/categories/indumentaria" class="category">👕<br>Indumentaria</a>
+      <a href="/categories/juegos" class="category">🎮<br>Juegos</a>
+      <a href="/categories/automotor" class="category">🚗<br>Automotor</a>
+      <a href="/categories/hogar" class="category">🏠<br>Hogar</a>
+      <a href="/categories/otros" class="category">🎁<br>Otros</a>
+    </nav>
+
+    <!-- Sección de resultados de búsqueda -->
+    <section class="product-section">
+      <h2>Resultados de búsqueda: "<%= query %>"</h2>
+      
+      <% if (results.length === 0) { %>
+        <div class="no-results">
+          <p>No encontramos productos que coincidan con "<%= query %>".</p>
+          <p>Por favor, intenta con otros términos o explora nuestras categorías.</p>
+        </div>
+      <% } else { %>
+        <p style="margin-bottom: 20px; color: #666;">Se encontraron <%= resultCount %> producto(s)</p>
+        <div class="product-grid">
+          <% results.forEach(product => { %>
+            <div class="product">
+              <% if (product.stock === 0) { %>
+                <span class="stock-badge out-of-stock">Sin stock</span>
+              <% } %>
+              <a href="/products/<%= product.id %>">
+                <img src="<%= product.image || '/images/imagenes/fallback.png' %>" alt="<%= product.title %>">
+                <div><%= product.title %></div>
+                <span><%= product.price %> puntos</span>
+              </a>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-categories">
+        <div>📱 Electrónica</div>
+        <div>🍔 Alimentos</div>
+        <div>🥤 Bebidas</div>
+        <div>👕 Indumentaria</div>
+        <div>🎮 Juegos</div>
+        <div>🚗 Automotor</div>
+        <div>🏠 Hogar</div>
+        <div>🎁 Otros</div>
+      </div>
+      <div class="footer-bottom">
+        <p>© MiEcommerce. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
