@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Sidebar from './SideBar';
 import SearchBar from '../molecules/SearchBar';
 import Button from '../atoms/Button';
+import MainArea from './MainArea';
 import { useState } from 'react';
 
 interface LayoutProps {
@@ -18,8 +19,20 @@ const Layout = ({ children, pageTitle }: LayoutProps) => {
     const isProductsPage = location.pathname === '/products';
     const isStoresPage = location.pathname === '/stores';
     const isCategoriesPage = location.pathname === '/categories';
+    const isProfilePage = location.pathname === '/profile';
     const sectionTitle = isProductsPage ? 'Productos' : isStoresPage ? 'Tiendas' : isCategoriesPage ? 'Categorias' : '';
     const actionLabel = isProductsPage ? 'Agregar Producto' : isStoresPage ? 'Agregar Tienda' : isCategoriesPage ? 'Agregar Categoría' : '';
+    const resolvedPageTitle = isProductsPage
+        ? 'Productos'
+        : isStoresPage
+            ? 'Tiendas'
+            : isCategoriesPage
+                ? 'Categorías'
+                : isProfilePage
+                    ? 'Perfil'
+                    : location.pathname === '/home'
+                        ? 'Inicio'
+                        : pageTitle;
 
     return (
         <div className="min-h-screen bg-[#1a1a1a] text-[#e0e0e0] flex flex-col">
@@ -60,7 +73,7 @@ const Layout = ({ children, pageTitle }: LayoutProps) => {
                 <Sidebar isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
                 <main className="flex-1 p-6 overflow-auto">
                     <div className="max-w-6xl w-full mx-auto">
-                        {children}
+                        <MainArea title={resolvedPageTitle}>{children}</MainArea>
                     </div>
                 </main>
             </div>
