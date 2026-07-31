@@ -1,10 +1,14 @@
 // src/components/organisms/Layout.tsx
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from './SideBar';
 import SearchBar from '../molecules/SearchBar';
 import Button from '../atoms/Button';
 import MainArea from './MainArea';
 import { useState } from 'react';
+
+const safeOnSearch = (value: string) => {
+    console.log('buscar', value);
+};
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -13,6 +17,7 @@ interface LayoutProps {
 
 const Layout = ({ children, pageTitle }: LayoutProps) => {
     const location = useLocation();
+    const navigate = useNavigate();
 
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
@@ -33,6 +38,18 @@ const Layout = ({ children, pageTitle }: LayoutProps) => {
                     : location.pathname === '/home'
                         ? 'Inicio'
                         : pageTitle;
+
+    const handlePrimaryAction = () => {
+        if (isProductsPage) {
+            navigate('/products/new');
+        } else if (isStoresPage) {
+            navigate('/stores');
+        } else if (isCategoriesPage) {
+            navigate('/categories');
+        } else {
+            navigate('/home');
+        }
+    };
 
     return (
         <div className="min-h-screen bg-[#1a1a1a] text-[#e0e0e0] flex flex-col">
@@ -57,11 +74,11 @@ const Layout = ({ children, pageTitle }: LayoutProps) => {
                             <div className="flex items-center gap-3">
                                 {sectionTitle && (
                                     <div className="hidden sm:block w-72">
-                                        <SearchBar placeholder={isProductsPage ? 'Buscar productos' : isStoresPage ? 'Buscar tienda...' : 'Buscar...'} onSearch={(v) => console.log('buscar', v)} />
+                                        <SearchBar placeholder={isProductsPage ? 'Buscar productos' : isStoresPage ? 'Buscar tienda...' : 'Buscar...'} onSearch={safeOnSearch} />
                                     </div>
                                 )}
                                 {sectionTitle && actionLabel && (
-                                    <Button label={actionLabel} variant="secondary" />
+                                    <Button label={actionLabel} variant="secondary" onClick={handlePrimaryAction} />
                                 )}
                             </div>
                         </div>

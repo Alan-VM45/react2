@@ -1,5 +1,4 @@
 import StatCard from "../../Componets/molecules/StatCard";
-import Button from "../../Componets/atoms/Button";
 import { useNavigate } from 'react-router-dom';
 
 function HomeMain() {
