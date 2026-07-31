@@ -197,6 +197,52 @@ function getTopProducts() {
   }
 }
 
+function getAllCategories() {
+  try {
+    const tableCategories = db.prepare('SELECT id, name FROM categories ORDER BY name').all();
+    if (tableCategories.length > 0) {
+      return tableCategories;
+    }
+
+    const productCategories = db.prepare(
+      "SELECT DISTINCT category AS name FROM products WHERE category IS NOT NULL AND TRIM(category) <> '' ORDER BY category"
+    ).all();
+
+    return productCategories;
+  } catch (error) {
+    console.error('Error al obtener categorías de SQLite:', error);
+    return [];
+  }
+}
+
+function getStats() {
+  try {
+    const stats = db.prepare(`
+      SELECT
+        COUNT(*) AS totalProducts,
+        COUNT(DISTINCT CASE WHEN category IS NOT NULL AND TRIM(category) <> '' THEN category END) AS totalCategories,
+        SUM(CASE WHEN top = 1 THEN 1 ELSE 0 END) AS topProducts,
+        SUM(CASE WHEN stock = 0 THEN 1 ELSE 0 END) AS outOfStock
+      FROM products
+    `).get();
+
+    return {
+      totalProducts: Number(stats.totalProducts || 0),
+      totalCategories: Number(stats.totalCategories || 0),
+      topProducts: Number(stats.topProducts || 0),
+      outOfStock: Number(stats.outOfStock || 0)
+    };
+  } catch (error) {
+    console.error('Error al obtener estadísticas de SQLite:', error);
+    return {
+      totalProducts: 0,
+      totalCategories: 0,
+      topProducts: 0,
+      outOfStock: 0
+    };
+  }
+}
+
 /**
  * Obtiene productos sugeridos desde SQLite
  * @param {object} product - Producto del cual obtener sugerencias
@@ -279,5 +325,7 @@ module.exports = {
   getTopProducts,
   getSuggestedProducts,
   getRelatedProducts,
-  sortByPrice
+  sortByPrice,
+  getAllCategories,
+  getStats
 };

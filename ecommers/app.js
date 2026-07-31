@@ -1,8 +1,9 @@
 const express = require('express');
+const cors = require('cors');
 const session = require('express-session');
 const path = require('path');
 const app = express();
-const port = 3000; // Mantengo el puerto de la rama prueba
+const port = process.env.PORT || 3000;
 
 // Configurar EJS como motor de plantillas
 app.set('view engine', 'ejs');
@@ -14,6 +15,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Middleware para parsear datos de formularios
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors());
 
 // Configuración de sesión (US #4)
 app.use(session({
@@ -40,6 +42,7 @@ const cartRoutes = require('./src/routes/cart');
 const productRoutes = require('./src/routes/product');
 const categoryRoutes = require('./src/routes/category');
 const searchRoutes = require('./src/routes/search');
+const apiRoutes = require('./src/routes/api');
 
 app.use('/', indexRoutes);
 app.use('/home', homeRoutes);
@@ -49,6 +52,11 @@ app.use('/cart', cartRoutes);
 app.use('/products', productRoutes);
 app.use('/categories', categoryRoutes);
 app.use('/search', searchRoutes);
+app.use('/api', apiRoutes);
+
+app.use('/api', (req, res) => {
+    res.status(404).json({ error: 'Ruta de API no encontrada.' });
+});
 
 // Middleware para errores 404 (US #2)
 app.use((req, res, next) => {
