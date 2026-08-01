@@ -26,6 +26,14 @@ export interface CreateProductPayload {
   suggestions: number[];
 }
 
+export interface CreateCategoryPayload {
+  name: string;
+}
+
+export interface UpdateCategoryPayload {
+  name: string;
+}
+
 const API_BASE = '/api';
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -39,7 +47,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const data = await response.json().catch(() => null);
 
   if (!response.ok) {
-    throw new Error((data && typeof data === 'object' && 'error' in data ? String(data.error) : 'Error en la solicitud'));
+    throw new Error((data && typeof data === 'object' && 'error' in data ? String((data as any).error) : 'Error en la solicitud'));
   }
 
   return data as T;
@@ -60,14 +68,47 @@ export const productsApi = {
     return request<Product>(`/products/${id}`);
   },
 
-  async getCategories() {
-    return request<CategoryOption[]>('/categories');
-  },
-
   async createProduct(payload: CreateProductPayload) {
     return request<Product>('/products', {
       method: 'POST',
       body: JSON.stringify(payload),
+    });
+  },
+
+  async updateProduct(id: string | number, payload: CreateProductPayload) {
+    return request<Product>(`/products/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  async deleteProduct(id: string | number) {
+    return request<{ message: string }>(`/products/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
+  async getCategories() {
+    return request<CategoryOption[]>('/categories');
+  },
+
+  async createCategory(payload: CreateCategoryPayload) {
+    return request<CategoryOption>('/categories', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  async updateCategory(id: number | string, payload: UpdateCategoryPayload) {
+    return request<CategoryOption>(`/categories/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  async deleteCategory(id: number | string) {
+    return request<{ message: string }>(`/categories/${id}`, {
+      method: 'DELETE',
     });
   },
 };

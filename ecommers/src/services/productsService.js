@@ -215,6 +215,166 @@ function getAllCategories() {
   }
 }
 
+function getCategoryById(id) {
+  try {
+    const stmt = db.prepare('SELECT * FROM categories WHERE id = ?');
+    return stmt.get(id) || null;
+  } catch (error) {
+    console.error('Error al obtener categoría por ID desde SQLite:', error);
+    return null;
+  }
+}
+
+function normalizeCategoryId(id) {
+  const numId = Number(id);
+  if (Number.isNaN(numId) || !Number.isInteger(numId) || numId <= 0) {
+    return {
+      isValid: false,
+      id: null,
+      statusCode: 400,
+      error: 'El ID de categoría debe ser un número válido y positivo.'
+    };
+  }
+
+  const category = getCategoryById(numId);
+  if (!category) {
+    return {
+      isValid: false,
+      id: null,
+      statusCode: 404,
+      error: 'La categoría no existe.'
+    };
+  }
+
+  return {
+    isValid: true,
+    id: numId,
+    statusCode: 200,
+    error: null
+  };
+}
+
+function createProduct(product) {
+  const categoryName = String(product.category || '').trim() || null;
+  if (categoryName) {
+    db.prepare('INSERT OR IGNORE INTO categories (name) VALUES (?)').run(categoryName);
+  }
+
+  const stmt = db.prepare(
+    'INSERT INTO products (title, image, description, price, category, stock, top, suggestions) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+  );
+  const info = stmt.run(
+    product.title,
+    product.image || null,
+    product.description || null,
+    Number(product.price),
+    categoryName,
+    Number(product.stock),
+    product.top ? 1 : 0,
+    JSON.stringify(Array.isArray(product.suggestions) ? product.suggestions : [])
+  );
+
+  return getProductById(info.lastInsertRowid);
+}
+
+function updateProduct(id, product) {
+  const existing = getProductById(id);
+  if (!existing) {
+    return null;
+  }
+
+  const categoryName = String(product.category || '').trim() || null;
+  if (categoryName) {
+    db.prepare('INSERT OR IGNORE INTO categories (name) VALUES (?)').run(categoryName);
+  }
+
+  const stmt = db.prepare(
+    'UPDATE products SET title = ?, image = ?, description = ?, price = ?, category = ?, stock = ?, top = ?, suggestions = ? WHERE id = ?'
+  );
+  stmt.run(
+    product.title,
+    product.image || null,
+    product.description || null,
+    Number(product.price),
+    categoryName,
+    Number(product.stock),
+    product.top ? 1 : 0,
+    JSON.stringify(Array.isArray(product.suggestions) ? product.suggestions : []),
+    id
+  );
+
+  return getProductById(id);
+}
+
+function deleteProduct(id) {
+  try {
+    const stmt = db.prepare('DELETE FROM products WHERE id = ?');
+    const info = stmt.run(id);
+    return info.changes > 0;
+  } catch (error) {
+    console.error('Error al eliminar producto de SQLite:', error);
+    return false;
+  }
+}
+
+function createCategory(name) {
+  const trimmedName = String(name || '').trim();
+  if (!trimmedName) {
+    return null;
+  }
+
+  try {
+    const insertStmt = db.prepare('INSERT OR IGNORE INTO categories (name) VALUES (?)');
+    insertStmt.run(trimmedName);
+    const existing = db.prepare('SELECT id, name FROM categories WHERE LOWER(name) = LOWER(?)').get(trimmedName.toLowerCase());
+    return existing || { id: null, name: trimmedName };
+  } catch (error) {
+    console.error('Error al crear categoría en SQLite:', error);
+    return null;
+  }
+}
+
+function updateCategory(id, name) {
+  const category = getCategoryById(id);
+  if (!category) {
+    return null;
+  }
+
+  const trimmedName = String(name || '').trim();
+  if (!trimmedName) {
+    return null;
+  }
+
+  const stmt = db.prepare('UPDATE categories SET name = ? WHERE id = ?');
+  const info = stmt.run(trimmedName, id);
+  if (info.changes === 0) {
+    return null;
+  }
+
+  db.prepare('UPDATE products SET category = ? WHERE LOWER(category) = LOWER(?)').run(trimmedName, category.name);
+
+  return {
+    id,
+    name: trimmedName
+  };
+}
+
+function deleteCategory(id) {
+  const category = getCategoryById(id);
+  if (!category) {
+    return false;
+  }
+
+  const stmt = db.prepare('DELETE FROM categories WHERE id = ?');
+  const info = stmt.run(id);
+  if (info.changes === 0) {
+    return false;
+  }
+
+  db.prepare('UPDATE products SET category = NULL WHERE LOWER(category) = LOWER(?)').run(category.name);
+  return true;
+}
+
 function getStats() {
   try {
     const stats = db.prepare(`
@@ -327,5 +487,13 @@ module.exports = {
   getRelatedProducts,
   sortByPrice,
   getAllCategories,
+  getCategoryById,
+  normalizeCategoryId,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  createCategory,
+  updateCategory,
+  deleteCategory,
   getStats
 };

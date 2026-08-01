@@ -4,6 +4,7 @@ import HomeMain from './Pages/Home/HomeMain';
 import ProductsList from './Pages/Products/ProductsList/ProductsList';
 import ProductsView from './Pages/Products/ProductsView/ProductsView';
 import ProductsNew from './Pages/Products/ProductsNew/ProductsNew';
+import ProductsEdit from './Pages/Products/ProductsEdit/ProductsEdit';
 import StoresList from './Pages/Stores/StoresList';
 import Profile from './Pages/Profile/Profile';
 import CategoriesList from './Pages/Categories/CategoriesList';
@@ -20,8 +21,9 @@ function App() {
           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="/home" element={<HomeMain />} />
           <Route path="/products" element={<ProductsList />} />
-          <Route path="/products/:id" element={<ProductsView />} />
           <Route path="/products/new" element={<ProductsNew />} />
+          <Route path="/products/:id/edit" element={<ProductsEdit />} />
+          <Route path="/products/:id" element={<ProductsView />} />
           <Route path="/stores" element={<StoresList />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/categories" element={<CategoriesList />} />

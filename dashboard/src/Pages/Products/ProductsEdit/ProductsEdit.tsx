@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { productsApi, type CategoryOption } from '../../../services/productsApi';
+import { useNavigate, useParams } from 'react-router-dom';
+import { productsApi, type CategoryOption, type Product } from '../../../services/productsApi';
 
-const ProductsNew = () => {
+const ProductsEdit = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
+
+  const [product, setProduct] = useState<Product | null>(null);
   const [categories, setCategories] = useState<CategoryOption[]>([]);
   const [form, setForm] = useState({
     title: '',
@@ -15,39 +18,73 @@ const ProductsNew = () => {
     top: false,
     suggestions: [] as number[],
   });
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadCategories = async () => {
+    const loadData = async () => {
       try {
-        const data = await productsApi.getCategories();
-        setCategories(data);
-      } catch {
-        setError('No se pudieron cargar las categorías');
+        const [productData, categoryData] = await Promise.all([
+          productsApi.getProductById(id ?? ''),
+          productsApi.getCategories(),
+        ]);
+
+        setProduct(productData);
+        setForm({
+          title: productData.title,
+          image: productData.image || '',
+          description: productData.description || '',
+          price: productData.price,
+          category: productData.category,
+          stock: productData.stock,
+          top: productData.top,
+          suggestions: productData.suggestions || [],
+        });
+        setCategories(categoryData);
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'No se pudo cargar el producto');
+      } finally {
+        setLoading(false);
       }
     };
 
-    loadCategories();
-  }, []);
+    if (id) {
+      loadData();
+    }
+  }, [id]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
     setSuccess(null);
 
+    if (!id) {
+      setError('ID de producto inválido.');
+      return;
+    }
+
     try {
-      await productsApi.createProduct(form);
-      setSuccess('Producto creado correctamente');
-      setTimeout(() => navigate('/products'), 500);
+      await productsApi.updateProduct(id, form);
+      setSuccess('Producto actualizado correctamente');
+      setTimeout(() => navigate(`/products/${id}`), 500);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'No se pudo crear el producto');
+      setError(err instanceof Error ? err.message : 'No se pudo actualizar el producto');
     }
   };
 
+  if (loading) {
+    return <p className="text-sm text-[#a0a0a0]">Cargando producto...</p>;
+  }
+
+  if (error || !product) {
+    return <p className="text-sm text-red-400">{error ?? 'Producto no encontrado'}</p>;
+  }
+
   return (
     <div className="rounded-lg border border-[#2a2a2a] bg-[#242424] p-5">
-      <h2 className="mb-4 text-xl font-semibold text-[#e0e0e0]">Nuevo producto</h2>
+      <h2 className="mb-4 text-xl font-semibold text-[#e0e0e0]">Editar producto</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <label className="block text-sm text-[#a0a0a0]">Título</label>
         <input
@@ -121,12 +158,21 @@ const ProductsNew = () => {
         </label>
         {error && <p className="text-sm text-red-400">{error}</p>}
         {success && <p className="text-sm text-green-400">{success}</p>}
-        <button type="submit" className="rounded bg-[#ec0000] px-4 py-2 text-sm font-medium text-white">
-          Guardar producto
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button type="submit" className="rounded bg-[#ec0000] px-4 py-2 text-sm font-medium text-white">
+            Guardar cambios
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate(`/products/${id}`)}
+            className="rounded border border-[#333333] px-4 py-2 text-sm text-[#e0e0e0]"
+          >
+            Cancelar
+          </button>
+        </div>
       </form>
     </div>
   );
 };
 
-export default ProductsNew;
+export default ProductsEdit;

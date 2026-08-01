@@ -8,6 +8,7 @@ const ProductsView = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -26,6 +27,19 @@ const ProductsView = () => {
     loadProduct();
   }, [id]);
 
+  const handleDelete = async () => {
+    if (!product || !window.confirm('¿Deseas eliminar este producto?')) {
+      return;
+    }
+
+    try {
+      await productsApi.deleteProduct(product.id);
+      navigate('/products');
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'No se pudo eliminar el producto');
+    }
+  };
+
   if (loading) {
     return <p className="text-sm text-[#a0a0a0]">Cargando producto...</p>;
   }
@@ -36,15 +50,34 @@ const ProductsView = () => {
 
   return (
     <div className="space-y-6 rounded-lg border border-[#2a2a2a] bg-[#242424] p-5">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <h2 className="text-xl font-semibold text-[#e0e0e0]">{product.title}</h2>
           <p className="text-sm text-[#a0a0a0]">{product.category}</p>
         </div>
-        <button onClick={() => navigate('/products')} className="rounded border border-[#333333] px-3 py-2 text-sm text-[#e0e0e0]">
-          Volver
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => navigate(`/products/${product.id}/edit`)}
+            className="rounded border border-[#333333] bg-[#2a2a2a] px-3 py-2 text-sm text-[#e0e0e0] hover:bg-[#333333]"
+          >
+            Editar
+          </button>
+          <button
+            onClick={handleDelete}
+            className="rounded bg-[#ec0000] px-3 py-2 text-sm font-medium text-white hover:bg-[#c70000]"
+          >
+            Eliminar
+          </button>
+          <button
+            onClick={() => navigate('/products')}
+            className="rounded border border-[#333333] px-3 py-2 text-sm text-[#e0e0e0]"
+          >
+            Volver
+          </button>
+        </div>
       </div>
+
+      {actionError && <p className="text-sm text-red-400">{actionError}</p>}
 
       <div className="grid gap-6 md:grid-cols-[220px_1fr]">
         <div className="flex h-52 items-center justify-center overflow-hidden rounded bg-[#1f1f1f] text-[#a0a0a0]">
